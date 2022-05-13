@@ -1,4 +1,51 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@model EmailSender.Models.Domains.Message
 
+@{ ViewBag.Title = "Home Page"; }
+
+<div class="row">
+    <div class="col-lg-5">
+        @using (Html.BeginForm("Index", "Home"))
+        {
+            @Html.AntiForgeryToken()
+            <p class="alert alert-light my-4">
+                Wszystkie pola są wymagane.
+            </p>
+
+            @Html.HiddenFor(x => x.Id)
+            @Html.HiddenFor(x => x.UserId)
+
+            <div class="form-group">
+                @Html.LabelFor(x => x.Receiver)
+                @Html.TextBoxFor(x => x.Receiver,
+                    new { @class = "form-control", autofocus = "autofocus" })
+                @Html.ValidationMessageFor(x => x.Receiver)
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(x => x.Title)
+                @Html.TextBoxFor(x => x.Title,
+                    new { @class = "form-control"})
+                @Html.ValidationMessageFor(x => x.Title)
+            </div>
+
+            <div class="form-group">
+            @Html.LabelFor(x => x.MessageContent)
+            @Html.TextAreaFor(x => x.MessageContent,
+           new { @class = "form-control"})
+            @Html.ValidationMessageFor(x => x.MessageContent)
+            </div>
+
+            <div class="form-group">
+            @Html.LabelFor(x => x.Sender)
+            @Html.TextBoxFor(x => x.Sender,
+           new { @class = "form-control"})
+            @Html.ValidationMessageFor(x => x.Sender)
+            </div>
+            <button class="btn btn-primary btn-lg mb-5" type="submit">
+                Wyślij
+            </button>
+        }
+    </div>
+
+
+</div>
