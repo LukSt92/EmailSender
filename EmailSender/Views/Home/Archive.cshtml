@@ -1,0 +1,35 @@
+﻿@model IEnumerable<EmailSender.Models.Domains.Message>
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        <h2>Wysłane wiadomości</h2>
+
+        <table class="table table-hover table-striped mt-3 mb-5">
+            <thead>
+                <tr>
+                    <th scope="col">Numer:</th>
+                    <th scope="col">Odbiorca:</th>
+                    <th scope="col">Treść:</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var message in Model)
+                {
+                    <tr>
+                        <td>
+                            <a class="fw-bold">@message.Id</a>
+                        </td>
+                        <td>@message.Receiver</td>
+                        <td class="text-wrap">@message.MessageContent</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+    </div>
+}
+else
+{
+    <h2>Brak wysłanych wiadomości.</h2>
+}

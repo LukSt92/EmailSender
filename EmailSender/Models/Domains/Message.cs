@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -33,5 +34,6 @@ namespace EmailSender.Models.Domains
         public string UserId { get; set; }
 
         public ApplicationUser User { get; set; }
+
     }
 }

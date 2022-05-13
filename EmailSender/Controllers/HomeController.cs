@@ -6,18 +6,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
 namespace EmailSender.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
 
         private MessageRepository _messageRepository = new MessageRepository();
         public ActionResult Index()
         {
-            ViewBag.Message = "Your application description page.";
 
             return View();
         }
@@ -25,20 +26,18 @@ namespace EmailSender.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Index(Message message)
+        public async Task<ActionResult> Index(Message message)
         {
             var userId = User.Identity.GetUserId();
             message.UserId = userId;
 
             try
-            {
-                if (ModelState.IsValid)
-                {
+            {  
                     _messageRepository.Add(message);
-                }
+                
                 var senderEmail = new MailAddress("lukst92reportservice@gmail.com", message.Sender);
                 var receiverEmail = new MailAddress(message.Receiver, "Receiver");
-                var password = "";
+                var password = "bncxvfcqfjcsszke";
                 var sub = message.Title;
                 var body = message.MessageContent;
                 var smtp = new SmtpClient
@@ -72,16 +71,18 @@ namespace EmailSender.Controllers
             return View();
         }
 
-        public ActionResult About()
+        
+        public ActionResult Archive()
         {
-            ViewBag.Message = "Your application description page.";
+            var userId = User.Identity.GetUserId();
+            var messages = _messageRepository.GetMessages(userId);
 
-            return View();
+            return View(messages);
         }
 
+        [AllowAnonymous]
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
 
             return View();
         }
