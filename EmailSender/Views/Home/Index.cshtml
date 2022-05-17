@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="col-lg-5">
-        @using (Html.BeginForm("Index", "Home"))
+        @using (Html.BeginForm("Index", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data"}))
         {
             @Html.AntiForgeryToken()
             <p class="alert alert-light my-4">
@@ -24,23 +24,28 @@
             <div class="form-group">
                 @Html.LabelFor(x => x.Title)
                 @Html.TextBoxFor(x => x.Title,
-                    new { @class = "form-control"})
+                    new { @class = "form-control" })
                 @Html.ValidationMessageFor(x => x.Title)
             </div>
 
             <div class="form-group">
-            @Html.LabelFor(x => x.MessageContent)
-            @Html.TextAreaFor(x => x.MessageContent,
-           new { @class = "form-control"})
-            @Html.ValidationMessageFor(x => x.MessageContent)
+                @Html.LabelFor(x => x.MessageContent)
+                @Html.TextAreaFor(x => x.MessageContent, 10,40, 
+               new { @class = "form-control", style="width: 100%; max width: 100%" })
+                @Html.ValidationMessageFor(x => x.MessageContent)
             </div>
 
             <div class="form-group">
-            @Html.LabelFor(x => x.Sender)
-            @Html.TextBoxFor(x => x.Sender,
-           new { @class = "form-control"})
-            @Html.ValidationMessageFor(x => x.Sender)
+                @Html.LabelFor(x => x.Sender)
+                @Html.TextBoxFor(x => x.Sender,
+               new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.Sender)
             </div>
+
+            <div class="form-group my-3">
+                <input type="file" name="fileUploader" />
+            </div>
+
             <button class="btn btn-primary btn-lg mb-5" type="submit">
                 Wyślij
             </button>

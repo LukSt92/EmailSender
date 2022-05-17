@@ -3,6 +3,7 @@ using EmailSender.Models.Repositories;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
@@ -26,18 +27,18 @@ namespace EmailSender.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Index(Message message)
+        public ActionResult Index(Message message, HttpPostedFileBase fileUploader)
         {
             var userId = User.Identity.GetUserId();
             message.UserId = userId;
 
             try
-            {  
-                    _messageRepository.Add(message);
-                
+            {
+                _messageRepository.Add(message);
+
                 var senderEmail = new MailAddress("lukst92reportservice@gmail.com", message.Sender);
                 var receiverEmail = new MailAddress(message.Receiver, "Receiver");
-                var password = "bncxvfcqfjcsszke";
+                var password = "#";
                 var sub = message.Title;
                 var body = message.MessageContent;
                 var smtp = new SmtpClient
@@ -49,14 +50,17 @@ namespace EmailSender.Controllers
                     UseDefaultCredentials = false,
                     Credentials = new NetworkCredential(senderEmail.Address, password)
                 };
-                using (var mess = new MailMessage(senderEmail, receiverEmail)
+                using (var mess = new MailMessage(senderEmail, receiverEmail))
                 {
-                    Subject = sub,
-                    Body = body
-                })
-                {
+                    mess.Subject = sub;
+                    mess.Body = body;
+                    {
+                        string fileName = Path.GetFileName(fileUploader.FileName);
+                        mess.Attachments.Add(new Attachment(fileUploader.InputStream, fileName));
+                    }
                     smtp.Send(mess);
                 }
+
                 return RedirectToAction("Sent");
             }
             catch (Exception)
